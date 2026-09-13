@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICMR-STW AI | 3D Clinical Symptom & Workflow Chatbot</title>
+  <meta name="description" content="Conversational 3D Clinical Decision Support System powered by official ICMR Guidelines, Mistral AI, and Chroma Cloud.">
+
+  <!-- Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- 3D Spatial Stylesheet -->
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- 3D Atmospheric Background -->
+  <div class="ambient-scene">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="app-viewport">
+
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+      <div class="brand-section">
+        <div class="brand-badge-3d" title="Official ICMR Standard Treatment Workflows">
+          <i class="fa-solid fa-staff-snake"></i>
+        </div>
+        <div class="brand-titles">
+          <h1>ICMR-STW AI <span class="version-tag">3D CHATBOT</span></h1>
+          <p>Evidence-Grounded Conversational Clinical Workflow Assistant</p>
+        </div>
+      </div>
+
+      <div class="header-telemetry">
+        <div class="pill-3d" title="Large Language Model">
+          <span class="pulse-dot"></span>
+          <span>Mistral AI (ministral-8b)</span>
+        </div>
+        <div class="pill-3d" title="Vector Database">
+          <span class="pulse-dot cyan"></span>
+          <span>Chroma Cloud (105 Chunks)</span>
+        </div>
+        <div class="pill-3d" title="PostgreSQL Audit Storage">
+          <span class="pulse-dot purple"></span>
+          <span>Supabase PG</span>
+        </div>
+        <button id="historyBtn" class="btn-icon-subtle" title="View Audited Queries">
+          <i class="fa-solid fa-clock-rotate-left"></i> Audit History
+        </button>
+        <button id="clearChatBtn" class="btn-icon-subtle" title="Clear Conversation">
+          <i class="fa-solid fa-broom"></i> Reset
+        </button>
+      </div>
+    </header>
+
+    <!-- Statutory Disclaimer -->
+    <div class="statutory-bar">
+      <i class="fa-solid fa-shield-halved"></i>
+      <div>
+        <strong>STATUTORY CLINICAL NOTICE:</strong> This conversational system provides evidence-grounded clinical decision support synthesized strictly from official ICMR Standard Treatment Workflows. It is <em>non-autonomous</em> and assists registered healthcare professionals.
+      </div>
+    </div>
+
+    <!-- Main Chat Arena -->
+    <main class="chatbot-grid">
+
+      <!-- Left Sidebar Controls -->
+      <aside class="sidebar-panel">
+
+        <!-- Clinical Engine Status Card -->
+        <div class="clinical-status-card">
+          <div class="status-icon-badge">
+            <i class="fa-solid fa-shield-heart"></i>
+          </div>
+          <div class="status-info">
+            <div class="status-title">ICMR Clinical Intelligence</div>
+            <div class="status-sub"><span class="pulse-dot"></span> Official STW Assistant</div>
+          </div>
+        </div>
+
+        <!-- Quick Symptom Presets -->
+        <div>
+          <div class="sidebar-section-title">
+            <span>Symptom Quick-Select</span>
+            <i class="fa-solid fa-bolt-lightning" style="color: var(--cyan-core);"></i>
+          </div>
+          <div class="symptom-chips-list">
+            <button type="button" class="preset-chip-btn" data-query="I have had purulent nasal discharge, facial pain, and congestion for 11 days, which worsened after initially getting better." data-vitals="Afebrile, BP 122/80 mmHg, facial tenderness over maxillary sinus">
+              <i class="fa-solid fa-head-side-cough"></i>
+              <span>Purulent Sinus Pain (11 Days)</span>
+            </button>
+            <button type="button" class="preset-chip-btn" data-query="Patient with acute kidney injury presents with serum potassium of 6.8 mEq/L and peaked T waves on ECG. What is the immediate treatment workflow?" data-vitals="K+ 6.8 mEq/L, eGFR 22 mL/min, ECG tall tented T-waves, BP 148/90">
+              <i class="fa-solid fa-heart-pulse"></i>
+              <span>AKI + Hyperkalemia (K+ 6.8)</span>
+            </button>
+            <button type="button" class="preset-chip-btn" data-query="Patient with palpitations, fatigue, and an irregular heart rate of 142 bpm. What is the acute rate control protocol?" data-vitals="Heart Rate 142 bpm (irregular), BP 124/82 mmHg, no history of heart failure">
+              <i class="fa-solid fa-wave-square"></i>
+              <span>Atrial Fibrillation (142 bpm)</span>
+            </button>
+            <button type="button" class="preset-chip-btn" data-query="6-year-old child presents with high acute fever, altered sensorium, and generalized tonic-clonic seizures. What is the initial emergency triage workflow?" data-vitals="Temp 103.4 F, GCS 11/15, stiff neck, altered sensorium">
+              <i class="fa-solid fa-child"></i>
+              <span>Encephalitis / Pediatric Triage</span>
+            </button>
+            <button type="button" class="preset-chip-btn" data-query="Adult patient with persistent BP 152/96 mmHg on repeat visits. What is the stepped-care pharmacological management?" data-vitals="BP 152/96 mmHg, non-diabetic, BMI 26.4, age 50">
+              <i class="fa-solid fa-stethoscope"></i>
+              <span>Hypertension Stepped Care</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Patient Context Input -->
+        <div>
+          <div class="sidebar-section-title">
+            <span>Patient Vitals / Labs</span>
+            <span style="font-size: 0.7rem; color: var(--text-muted);">(Optional)</span>
+          </div>
+          <div class="vitals-box">
+            <textarea id="vitalsInput" placeholder="e.g. BP 150/95, K+ 6.8, eGFR 22, ECG tall T-waves, Age 52..."></textarea>
+          </div>
+        </div>
+
+        <!-- Indexed Catalog Counter -->
+        <div class="stat-box">
+          <span>Official ICMR STWs Indexed:</span>
+          <strong>9 STWs (8 Specialties)</strong>
+        </div>
+
+      </aside>
+
+      <!-- Chat Stream & Input Arena -->
+      <section class="chat-arena">
+
+        <!-- Chat Messages Container -->
+        <div id="chatMessages" class="chat-messages">
+          <!-- Initial AI Welcome Message -->
+          <div class="message-row ai">
+            <div class="bubble-avatar ai">
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <div class="bubble-content">
+              <div class="bubble-ai-card">
+                <span class="urgency-badge-3d urgency-routine">
+                  <i class="fa-solid fa-circle-check"></i> ICMR Clinical Companion Online
+                </span>
+                <div class="guidance-text">
+                  Hello! I am your <strong>ICMR Clinical Workflow Intelligence Assistant</strong>. You can describe any clinical symptoms, patient vitals, or condition questions (e.g., <em>"I have severe facial pain and purulent nasal discharge for 10 days"</em> or <em>"Patient with acute kidney injury and high potassium"</em>).
+                  <br><br>
+                  I will analyze your inquiry against the official <strong>ICMR Standard Treatment Workflows</strong> and provide:
+                  <ul style="margin-left: 20px; margin-top: 8px; color: #cbd5e1;">
+                    <li>Conversational clinical assessment and guidance</li>
+                    <li>Clinical Urgency Level (<span style="color: var(--crimson-alert);">EMERGENCY</span> / <span style="color: var(--amber-warn);">URGENT</span> / <span style="color: var(--emerald-live);">ROUTINE</span>)</li>
+                    <li>Critical life-threatening Red Flag alerts</li>
+                    <li>Step-by-step ICMR guideline workflow stages with exact page numbers</li>
+                    <li>Authoritative evidence citations</li>
+                  </ul>
+                </div>
+                <div class="immediate-actions-row">
+                  <span class="action-pill"><i class="fa-solid fa-lightbulb"></i> Describe your symptoms below or click a quick-preset on the left!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div id="typingIndicator" class="typing-indicator" style="margin-left: 24px; margin-bottom: 12px;">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <span style="font-size: 0.78rem; color: var(--text-muted); margin-left: 6px;">Consulting ICMR guidelines via Mistral AI...</span>
+        </div>
+
+        <!-- Floating 3D Input Dock -->
+        <div class="input-dock">
+          <form id="chatForm">
+            <div class="input-row">
+              <textarea 
+                id="messageInput" 
+                class="chat-input" 
+                rows="1" 
+                placeholder="Describe symptoms or clinical inquiry (e.g. 'I have high fever and facial pain for 10 days, what should I do?')..."
+                required
+              ></textarea>
+              <button type="submit" id="sendBtn" class="send-btn-3d" title="Send Query">
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Audit History Modal -->
+  <div id="historyModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-database" style="color: var(--purple-accent);"></i> Supabase Audit Logs</h3>
+        <button id="closeModalBtn" class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="historyList" class="modal-body">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Application Script -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
